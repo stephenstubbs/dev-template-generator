@@ -1,0 +1,3 @@
+[template]
+name = "pulumi"
+description = "A Nix-flake-based Pulumi development environment"

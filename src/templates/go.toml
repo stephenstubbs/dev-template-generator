@@ -1,0 +1,3 @@
+[template]
+name = "go"
+description = "A Nix-flake-based Go development environment"

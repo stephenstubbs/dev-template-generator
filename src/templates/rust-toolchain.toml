@@ -1,0 +1,3 @@
+[template]
+name = "rust-toolchain"
+description = "A Nix-flake-based Rust development environment with Rust version defined by a rust-toolchain.toml file"

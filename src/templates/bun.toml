@@ -1,0 +1,3 @@
+[template]
+name = "bun"
+description = "A Nix-flake-based Bun development environment"

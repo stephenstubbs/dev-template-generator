@@ -1,0 +1,3 @@
+[template]
+name = "clojure"
+description = "A Nix-flake-based Clojure development environment"

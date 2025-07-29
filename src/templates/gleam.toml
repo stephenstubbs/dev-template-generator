@@ -1,0 +1,3 @@
+[template]
+name = "gleam"
+description = "A Nix-flake-based Gleam development environment"

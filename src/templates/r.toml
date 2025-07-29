@@ -1,0 +1,3 @@
+[template]
+name = "r"
+description = "A Nix-flake-based R development environment"

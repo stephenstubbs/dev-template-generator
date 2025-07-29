@@ -1,0 +1,3 @@
+[template]
+name = "ocaml"
+description = "A Nix-flake-based OCaml development environment"

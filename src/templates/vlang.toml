@@ -1,0 +1,3 @@
+[template]
+name = "vlang"
+description = "A Nix-flake-based Vlang development environment"

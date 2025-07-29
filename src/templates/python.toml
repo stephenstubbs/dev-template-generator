@@ -1,0 +1,3 @@
+[template]
+name = "python"
+description = "A Nix-flake-based Python development environment"

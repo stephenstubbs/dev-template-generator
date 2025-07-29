@@ -1,0 +1,3 @@
+[template]
+name = "nim"
+description = "A Nix-flake-based Nim development environment"

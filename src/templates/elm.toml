@@ -1,0 +1,3 @@
+[template]
+name = "elm"
+description = "A Nix-flake-based Elm development environment"

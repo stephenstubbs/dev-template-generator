@@ -1,0 +1,3 @@
+[template]
+name = "swift"
+description = "A Nix-flake-based Swift development environment"

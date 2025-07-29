@@ -1,0 +1,3 @@
+[template]
+name = "nickel"
+description = "A Nix-flake-based Nickel development environment"

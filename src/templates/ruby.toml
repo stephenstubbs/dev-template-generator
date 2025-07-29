@@ -1,0 +1,3 @@
+[template]
+name = "ruby"
+description = "A Nix-flake-based Ruby development environment"

@@ -1,0 +1,3 @@
+[template]
+name = "elixir"
+description = "A Nix-flake-based Elixir development environment"

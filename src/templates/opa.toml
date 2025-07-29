@@ -1,0 +1,3 @@
+[template]
+name = "opa"
+description = "A Nix-flake-based Open Policy Agent development environment"

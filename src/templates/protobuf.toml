@@ -1,0 +1,3 @@
+[template]
+name = "protobuf"
+description = "A Nix-flake-based Protobuf development environment"

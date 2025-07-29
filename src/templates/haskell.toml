@@ -1,0 +1,3 @@
+[template]
+name = "haskell"
+description = "A Nix-flake-based Haskell development environment"

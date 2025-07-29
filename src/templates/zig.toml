@@ -1,0 +1,3 @@
+[template]
+name = "zig"
+description = "A Nix-flake-based Zig development environment"

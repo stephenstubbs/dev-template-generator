@@ -1,0 +1,3 @@
+[template]
+name = "latex"
+description = "A Nix-flake-based LaTeX development environment"

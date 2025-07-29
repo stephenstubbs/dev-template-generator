@@ -1,0 +1,3 @@
+[template]
+name = "scala"
+description = "A Nix-flake-based Scala development environment"

@@ -1,0 +1,3 @@
+[template]
+name = "kotlin"
+description = "A Nix-flake-based Kotlin development environment"

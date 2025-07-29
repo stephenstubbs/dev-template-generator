@@ -1,0 +1,3 @@
+[template]
+name = "nix"
+description = "A Nix-flake-based Nix development environment"

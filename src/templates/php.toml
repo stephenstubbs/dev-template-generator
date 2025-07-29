@@ -1,0 +1,3 @@
+[template]
+name = "php"
+description = "A Nix-flake-based PHP development environment"

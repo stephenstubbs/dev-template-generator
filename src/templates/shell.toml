@@ -1,0 +1,3 @@
+[template]
+name = "shell"
+description = "A Nix-flake-based Shell development environment"

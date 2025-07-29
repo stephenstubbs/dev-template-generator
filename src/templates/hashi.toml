@@ -1,0 +1,3 @@
+[template]
+name = "hashi"
+description = "A Nix-flake-based development environment for Terraform, Packer, and Nomad"

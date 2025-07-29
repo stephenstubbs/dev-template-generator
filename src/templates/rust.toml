@@ -1,0 +1,3 @@
+[template]
+name = "rust"
+description = "A Nix-flake-based Rust development environment"

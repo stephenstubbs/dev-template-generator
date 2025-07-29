@@ -1,0 +1,3 @@
+[template]
+name = "java"
+description = "A Nix-flake-based Java development environment"
