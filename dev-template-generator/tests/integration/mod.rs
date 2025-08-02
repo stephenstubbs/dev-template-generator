@@ -1,0 +1,9 @@
+pub mod common;
+pub mod cli_tests;
+pub mod error_tests;
+pub mod single_template_tests;
+pub mod multi_template_tests;
+pub mod comprehensive_tests;
+pub mod combination_tests;
+pub mod stress_tests;
+pub mod coverage_tests;
