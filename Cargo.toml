@@ -1,6 +1,6 @@
 [workspace]
 members = [
-  "dev-template-generator",
+  "generator",
   "nix-parser"
 ]
 resolver = "2"

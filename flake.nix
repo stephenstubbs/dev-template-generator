@@ -32,8 +32,8 @@
           ];
         };
 
-        dev-template-generator = pkgs.rustPlatform.buildRustPackage {
-          pname = "dev-template-generator";
+        nix-flake-generator = pkgs.rustPlatform.buildRustPackage {
+          pname = "nix-flake-generator";
           version = "0.1.0";
           src = ./.;
 
@@ -57,7 +57,7 @@
 
           meta = with pkgs.lib; {
             description = "A Rust CLI tool for generating multi-language nix development environments";
-            homepage = "https://github.com/stephenstubbs/dev-template-generator";
+            homepage = "https://github.com/stephenstubbs/nix-flake-generator";
             license = licenses.mit;
             maintainers = [ ];
           };
@@ -65,14 +65,14 @@
       in
       {
         packages = {
-          default = dev-template-generator;
-          dev-template-generator = dev-template-generator;
+          default = nix-flake-generator;
+          nix-flake-generator = nix-flake-generator;
         };
 
         apps = {
           default = {
             type = "app";
-            program = "${dev-template-generator}/bin/dev-template-generator";
+            program = "${nix-flake-generator}/bin/nix-flake-generator";
           };
         };
 

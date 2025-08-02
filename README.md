@@ -1,4 +1,4 @@
-# Dev Template Generator
+# Nix Flake Generator
 
 A Rust CLI tool for generating nix development environments. Supports 35 programming languages with intelligent template merging for single-language and polyglot projects.
 
