@@ -74,29 +74,28 @@ components = ["rustfmt", "rust-analyzer"]
 
     let path_str = temp_path.to_string_lossy();
     println!(
-        "🔍 Running nix flake check on temporary directory for {}",
-        test_name
+        "🔍 Running nix flake check on temporary directory for {test_name}"
     );
 
     let output = StdCommand::new("nix")
-        .args(&["flake", "check", "--no-build", &path_str])
+        .args(["flake", "check", "--no-build", &path_str])
         .output();
 
     match output {
         Ok(result) => {
             if result.status.success() {
-                println!("✅ Nix validation passed for {}", test_name);
+                println!("✅ Nix validation passed for {test_name}");
             } else {
                 let stderr = String::from_utf8_lossy(&result.stderr);
                 let stdout = String::from_utf8_lossy(&result.stdout);
-                println!("❌ Nix validation failed for {}:", test_name);
-                println!("STDOUT: {}", stdout);
-                println!("STDERR: {}", stderr);
-                panic!("Nix flake validation failed for {}", test_name);
+                println!("❌ Nix validation failed for {test_name}:");
+                println!("STDOUT: {stdout}");
+                println!("STDERR: {stderr}");
+                panic!("Nix flake validation failed for {test_name}");
             }
         }
         Err(e) => {
-            println!("⚠️  Nix not available, skipping validation: {}", e);
+            println!("⚠️  Nix not available, skipping validation: {e}");
             // Don't fail if nix is not available - this allows tests to run in environments without nix
         }
     }
@@ -117,8 +116,7 @@ fn test_cli_init_rust() {
         .assert()
         .success()
         .stdout(predicate::str::contains(format!(
-            "Initialized rust template in {}",
-            temp_path
+            "Initialized rust template in {temp_path}"
         )));
 
     // Verify the flake was created and has expected content
@@ -148,8 +146,7 @@ fn test_cli_init_multi_rust_go() {
         .assert()
         .success()
         .stdout(predicate::str::contains(format!(
-            "Initialized multi-language template (rust,go) in {}",
-            temp_path
+            "Initialized multi-language template (rust,go) in {temp_path}"
         )));
 
     // Verify the merged flake was created
@@ -214,15 +211,6 @@ fn test_cli_init_complex_multi_language() {
 }
 
 #[test]
-fn test_cli_update_command() {
-    let mut cmd = Command::cargo_bin("dev-template-generator").unwrap();
-    cmd.arg("update")
-        .assert()
-        .success()
-        .stdout(predicate::str::contains("Templates updated successfully"));
-}
-
-#[test]
 fn test_cli_missing_template_argument() {
     let mut cmd = Command::cargo_bin("dev-template-generator").unwrap();
     cmd.arg("init")
@@ -283,16 +271,14 @@ fn test_all_single_language_templates() {
             .assert()
             .success()
             .stdout(predicate::str::contains(format!(
-                "Initialized {} template in {}",
-                language, temp_path
+                "Initialized {language} template in {temp_path}"
             )));
 
         // Verify flake was created
         let flake_path = temp_dir.path().join("flake.nix");
         assert!(
             flake_path.exists(),
-            "flake.nix should be created for {}",
-            language
+            "flake.nix should be created for {language}"
         );
 
         let flake_content = fs::read_to_string(&flake_path).expect("Should read flake content");
@@ -300,32 +286,27 @@ fn test_all_single_language_templates() {
         // Basic validation - all flakes should have these
         assert!(
             flake_content.contains("description ="),
-            "{} should have description",
-            language
+            "{language} should have description"
         );
         assert!(
             flake_content.contains("inputs"),
-            "{} should have inputs",
-            language
+            "{language} should have inputs"
         );
         assert!(
             flake_content.contains("outputs"),
-            "{} should have outputs",
-            language
+            "{language} should have outputs"
         );
         assert!(
             flake_content.contains("devShells"),
-            "{} should have devShells",
-            language
+            "{language} should have devShells"
         );
         assert!(
             flake_content.contains("nixpkgs"),
-            "{} should reference nixpkgs",
-            language
+            "{language} should reference nixpkgs"
         );
 
         // Validate with nix if available
-        validate_flake_content_with_nix_check(&flake_content, &format!("test-single-{}", language));
+        validate_flake_content_with_nix_check(&flake_content, &format!("test-single-{language}"));
     }
 }
 
@@ -391,16 +372,14 @@ fn test_popular_language_combinations() {
             .assert()
             .success()
             .stdout(predicate::str::contains(format!(
-                "Initialized multi-language template ({}) in {}",
-                langs, temp_path
+                "Initialized multi-language template ({langs}) in {temp_path}"
             )));
 
         // Verify flake was created
         let flake_path = temp_dir.path().join("flake.nix");
         assert!(
             flake_path.exists(),
-            "flake.nix should be created for {}",
-            description
+            "flake.nix should be created for {description}"
         );
 
         let flake_content = fs::read_to_string(&flake_path).expect("Should read flake content");
@@ -408,33 +387,28 @@ fn test_popular_language_combinations() {
         // Validate multi-language structure
         assert!(
             flake_content.contains("Multi-language development environment"),
-            "{} should have multi-language description",
-            description
+            "{description} should have multi-language description"
         );
         assert!(
             flake_content.contains("nixpkgs.url"),
-            "{} should have nixpkgs input",
-            description
+            "{description} should have nixpkgs input"
         );
         assert!(
             flake_content.contains("devShells"),
-            "{} should have devShells",
-            description
+            "{description} should have devShells"
         );
 
         // Validate each language appears in the description
         for lang in langs.split(',') {
             assert!(
                 flake_content.contains(lang),
-                "{} should contain {}",
-                description,
-                lang
+                "{description} should contain {lang}"
             );
         }
 
         // Validate with nix if available
         let safe_name = langs.replace(",", "-");
-        validate_flake_content_with_nix_check(&flake_content, &format!("test-combo-{}", safe_name));
+        validate_flake_content_with_nix_check(&flake_content, &format!("test-combo-{safe_name}"));
     }
 }
 
@@ -456,7 +430,7 @@ fn test_stress_test_large_combinations() {
 
         let result = cmd
             .arg("init")
-            .arg(&langs)
+            .arg(langs)
             .arg("--path")
             .arg(&*temp_path)
             .assert();
@@ -471,20 +445,18 @@ fn test_stress_test_large_combinations() {
                 // Basic validation
                 assert!(
                     flake_content.contains("Multi-language development environment"),
-                    "Large combo {} should have multi-language description",
-                    combo
+                    "Large combo {combo} should have multi-language description"
                 );
                 assert!(
                     flake_content.contains("devShells"),
-                    "Large combo {} should have devShells",
-                    combo
+                    "Large combo {combo} should have devShells"
                 );
 
                 // Validate with nix if available
                 let safe_name = combo.replace(",", "-");
                 validate_flake_content_with_nix_check(
                     &flake_content,
-                    &format!("test-large-{}", safe_name),
+                    &format!("test-large-{safe_name}"),
                 );
             }
         }
@@ -572,8 +544,7 @@ fn test_comprehensive_language_coverage() {
     for lang in &all_languages {
         assert!(
             covered_languages.contains(lang),
-            "Language '{}' is not covered in comprehensive combinations",
-            lang
+            "Language '{lang}' is not covered in comprehensive combinations"
         );
     }
 
@@ -595,16 +566,14 @@ fn test_comprehensive_language_coverage() {
             .assert()
             .success()
             .stdout(predicate::str::contains(format!(
-                "Initialized multi-language template ({}) in {}",
-                langs, temp_path
+                "Initialized multi-language template ({langs}) in {temp_path}"
             )));
 
         // Verify flake was created
         let flake_path = temp_dir.path().join("flake.nix");
         assert!(
             flake_path.exists(),
-            "flake.nix should be created for {}",
-            description
+            "flake.nix should be created for {description}"
         );
 
         let flake_content = fs::read_to_string(&flake_path).expect("Should read flake content");
@@ -612,27 +581,22 @@ fn test_comprehensive_language_coverage() {
         // Basic validation
         assert!(
             flake_content.contains("Multi-language development environment"),
-            "{} should have multi-language description",
-            description
+            "{description} should have multi-language description"
         );
         assert!(
             flake_content.contains("nixpkgs.url"),
-            "{} should have nixpkgs input",
-            description
+            "{description} should have nixpkgs input"
         );
         assert!(
             flake_content.contains("devShells"),
-            "{} should have devShells",
-            description
+            "{description} should have devShells"
         );
 
         // Verify each language appears in the description
         for lang in langs.split(',') {
             assert!(
                 flake_content.contains(lang),
-                "{} should contain {}",
-                description,
-                lang
+                "{description} should contain {lang}"
             );
         }
 
@@ -640,7 +604,7 @@ fn test_comprehensive_language_coverage() {
         let safe_name = langs.replace(",", "-");
         validate_flake_content_with_nix_check(
             &flake_content,
-            &format!("test-comprehensive-{}", safe_name),
+            &format!("test-comprehensive-{safe_name}"),
         );
     }
 

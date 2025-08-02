@@ -4,7 +4,7 @@ use serde::Deserialize;
 use std::collections::HashMap;
 
 #[derive(RustEmbed)]
-#[folder = "src/templates/"]
+#[folder = "../nix-parser/src/templates/"]
 struct Templates;
 
 #[derive(Deserialize)]
@@ -14,12 +14,11 @@ struct TemplateMetadata {
 
 #[derive(Deserialize)]
 struct TemplateInfo {
-    name: String,
     description: String,
 }
 
 pub static EMBEDDED_TEMPLATES: Lazy<HashMap<&'static str, (&'static str, &'static str)>> =
-    Lazy::new(|| load_templates());
+    Lazy::new(load_templates);
 
 fn load_templates() -> HashMap<&'static str, (&'static str, &'static str)> {
     let mut templates = HashMap::new();
@@ -35,7 +34,7 @@ fn load_templates() -> HashMap<&'static str, (&'static str, &'static str)> {
                 if let Ok(toml_content) = std::str::from_utf8(&toml_file.data) {
                     if let Ok(metadata) = toml::from_str::<TemplateMetadata>(toml_content) {
                         // Read the corresponding .nix file
-                        let nix_path = format!("{}.nix", template_name);
+                        let nix_path = format!("{template_name}.nix");
                         if let Some(nix_file) = Templates::get(&nix_path) {
                             if let Ok(nix_content) = std::str::from_utf8(&nix_file.data) {
                                 // Convert to static strings by leaking memory
@@ -125,8 +124,7 @@ mod tests {
         for template in &expected_templates {
             assert!(
                 templates.contains_key(template),
-                "Template '{}' should exist",
-                template
+                "Template '{template}' should exist"
             );
         }
     }
@@ -167,8 +165,7 @@ mod tests {
                 // Java templates should reference JDK in some form
                 assert!(
                     content.contains("jdk") || content.contains("openjdk"),
-                    "{} template should reference JDK",
-                    template_name
+                    "{template_name} template should reference JDK"
                 );
             }
         }

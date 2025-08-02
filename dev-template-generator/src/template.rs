@@ -110,9 +110,4 @@ components = ["rustfmt", "rust-analyzer"]
         }
     }
 
-    pub async fn update_templates(&mut self) -> Result<()> {
-        self.templates.clear();
-        self.load_embedded_templates().await?;
-        Ok(())
-    }
 }

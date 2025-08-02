@@ -28,14 +28,12 @@ enum Commands {
     },
     /// List available templates
     List,
-    /// Update local template cache
-    Update,
 }
 
 #[tokio::main]
 async fn main() -> Result<()> {
     let cli = Cli::parse();
-    let mut manager = TemplateManager::new().await?;
+    let manager = TemplateManager::new().await?;
 
     match cli.command {
         Commands::Init { templates, path } => {
@@ -63,10 +61,6 @@ async fn main() -> Result<()> {
         }
         Commands::List => {
             manager.list_templates();
-        }
-        Commands::Update => {
-            manager.update_templates().await?;
-            println!("Templates updated successfully");
         }
     }
 

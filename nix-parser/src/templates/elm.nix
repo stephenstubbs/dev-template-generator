@@ -17,16 +17,26 @@
         nixpkgs.lib.genAttrs supportedSystems (
           system:
           f {
-            pkgs = import nixpkgs { inherit system; };
+            pkgs = import nixpkgs {
+              inherit system;
+              overlays = [ self.overlays.default ];
+            };
           }
         );
     in
     {
+      overlays.default = final: prev: {
+        elm = prev.elmPackages.elm;
+      };
+
       devShells = forEachSupportedSystem (
         { pkgs }:
         {
           default = pkgs.mkShell {
-            packages = (with pkgs.elmPackages; [ elm ]) ++ (with pkgs; [ elm2nix ]);
+            packages = with pkgs; [
+              elm
+              elm2nix
+            ];
           };
         }
       );
