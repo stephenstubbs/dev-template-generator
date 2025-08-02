@@ -9,7 +9,7 @@ mod template;
 use template::TemplateManager;
 
 #[derive(Parser)]
-#[command(name = "dev-template-generator")]
+#[command(name = "nix-flake-generator")]
 #[command(about = "Generate development environments from nix templates")]
 struct Cli {
     #[command(subcommand)]

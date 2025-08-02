@@ -20,17 +20,17 @@ bun, c-cpp, clojure, csharp, cue, dhall, elixir, elm, gleam, go, hashi, haskell,
 
 ```bash
 # Install directly from GitHub
-nix profile install github:stephenstubbs/dev-template-generator
+nix profile install github:stephenstubbs/nix-flake-generator
 
 # Verify installation
-dev-template-generator --help
+nix-flake-generator --help
 ```
 
 ### Option 2: Run Without Installing
 
 ```bash
 # Run directly from GitHub
-nix run github:stephenstubbs/dev-template-generator -- --help
+nix run github:stephenstubbs/nix-flake-generator -- --help
 ```
 
 ### Option 3: Add to Your Flake
@@ -41,14 +41,14 @@ Add to your `flake.nix` inputs:
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    
-    dev-template-generator = {
-      url = "github:stephenstubbs/dev-template-generator";
+
+    nix-flake-generator = {
+      url = "github:stephenstubbs/nix-flake-generator";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-  
-  outputs = { self, nixpkgs, dev-template-generator, ... }:
+
+  outputs = { self, nixpkgs, nix-flake-generator, ... }:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
@@ -56,7 +56,7 @@ Add to your `flake.nix` inputs:
     {
       devShells.${system}.default = pkgs.mkShell {
         packages = [
-          dev-template-generator.packages.${system}.default
+          nix-flake-generator.packages.${system}.default
         ];
       };
     };
@@ -67,13 +67,13 @@ Add to your `flake.nix` inputs:
 
 ```bash
 # Clone and enter development environment
-git clone https://github.com/stephenstubbs/dev-template-generator
-cd dev-template-generator
+git clone https://github.com/stephenstubbs/nix-flake-generator
+cd nix-flake-generator
 nix develop
 
 # Build and run
 cargo build --release
-./target/release/dev-template-generator --help
+./target/release/nix-flake-generator --help
 ```
 
 ## Usage
@@ -82,13 +82,13 @@ cargo build --release
 
 ```bash
 # List all available templates
-dev-template-generator list
+nix-flake-generator list
 
 # Initialize a development environment (single or multi-language)
-dev-template-generator init <template(s)> [--path <directory>]
+nix-flake-generator init <template(s)> [--path <directory>]
 
 # Show help
-dev-template-generator --help
+nix-flake-generator --help
 ```
 
 ### Examples
@@ -97,32 +97,32 @@ dev-template-generator --help
 
 ```bash
 # Create a Rust development environment
-dev-template-generator init rust
+nix-flake-generator init rust
 
 # Create a Python environment in a specific directory
-dev-template-generator init python --path my-python-project
+nix-flake-generator init python --path my-python-project
 
 # Create a Go environment
-dev-template-generator init go --path go-service
+nix-flake-generator init go --path go-service
 ```
 
 #### Multi-Language Environments
 
 ```bash
 # Full-stack web development (Rust backend, Node frontend)
-dev-template-generator init rust,node --path fullstack-app
+nix-flake-generator init rust,node --path fullstack-app
 
 # JVM polyglot environment
-dev-template-generator init java,kotlin,scala --path jvm-project
+nix-flake-generator init java,kotlin,scala --path jvm-project
 
 # Systems programming languages
-dev-template-generator init rust,c-cpp,zig --path systems-project
+nix-flake-generator init rust,c-cpp,zig --path systems-project
 
 # Data science stack
-dev-template-generator init python,r --path data-project
+nix-flake-generator init python,r --path data-project
 
 # Functional programming environment
-dev-template-generator init haskell,elixir,ocaml --path fp-project
+nix-flake-generator init haskell,elixir,ocaml --path fp-project
 ```
 
 #### Using the Generated Environment
@@ -155,7 +155,7 @@ The tool intelligently merges templates, handling:
 
 #### Example Multi-Language Output
 
-For `dev-template-generator init rust,go,node --path web-stack`:
+For `nix-flake-generator init rust,go,node --path web-stack`:
 
 ```nix
 {
@@ -181,7 +181,7 @@ For `dev-template-generator init rust,go,node --path web-stack`:
             cargo-edit
             cargo-watch
             rust-analyzer
-            # Go tools  
+            # Go tools
             go
             gotools
             golangci-lint
@@ -193,7 +193,7 @@ For `dev-template-generator init rust,go,node --path web-stack`:
             openssl
             pkg-config
           ];
-          
+
           env = {
             RUST_SRC_PATH = "${pkgs.rustToolchain}/lib/rustlib/src/rust/library";
           };
@@ -219,7 +219,7 @@ For `dev-template-generator init rust,go,node --path web-stack`:
 
 All templates support:
 - x86_64-linux
-- aarch64-linux  
+- aarch64-linux
 - x86_64-darwin (macOS Intel)
 - aarch64-darwin (macOS Apple Silicon)
 

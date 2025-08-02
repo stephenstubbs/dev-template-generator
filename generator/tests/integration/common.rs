@@ -5,7 +5,7 @@ use tempfile::TempDir;
 
 // Test helper functions
 pub fn create_cargo_command() -> Command {
-    Command::cargo_bin("dev-template-generator").unwrap()
+    Command::cargo_bin("nix-flake-generator").unwrap()
 }
 
 pub fn create_temp_dir_with_path() -> (TempDir, String) {
@@ -17,13 +17,17 @@ pub fn create_temp_dir_with_path() -> (TempDir, String) {
 pub fn assert_flake_exists_and_contains(temp_dir: &TempDir, expected_contents: &[&str]) -> String {
     let flake_path = temp_dir.path().join("flake.nix");
     assert!(flake_path.exists(), "flake.nix should be created");
-    
+
     let flake_content = fs::read_to_string(&flake_path).expect("Should read flake content");
-    
+
     for content in expected_contents {
-        assert!(flake_content.contains(content), "Flake should contain: {}", content);
+        assert!(
+            flake_content.contains(content),
+            "Flake should contain: {}",
+            content
+        );
     }
-    
+
     flake_content
 }
 
@@ -42,10 +46,10 @@ pub fn assert_basic_flake_structure(flake_content: &str, test_name: &str) {
 pub fn validate_flake_content_with_nix_check(flake_content: &str, test_name: &str) {
     let temp_dir = TempDir::new().expect("Should create temp directory");
     let temp_path = temp_dir.path();
-    
+
     let flake_path = temp_path.join("flake.nix");
     fs::write(&flake_path, flake_content).expect("Should write flake.nix");
-    
+
     create_additional_files_if_needed(flake_content, temp_path);
     run_nix_validation(temp_path, test_name);
 }
@@ -64,11 +68,11 @@ components = ["rustfmt", "rust-analyzer"]
 fn run_nix_validation(temp_path: &std::path::Path, test_name: &str) {
     let path_str = temp_path.to_string_lossy();
     println!("🔍 Running nix flake check on temporary directory for {test_name}");
-    
+
     let output = StdCommand::new("nix")
         .args(["flake", "check", "--no-build", &path_str])
         .output();
-    
+
     match output {
         Ok(result) => {
             if result.status.success() {

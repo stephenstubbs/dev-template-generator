@@ -1,5 +1,5 @@
 [package]
-name = "dev-template-generator"
+name = "nix-flake-generator"
 version = "0.1.0"
 edition = "2021"
 
