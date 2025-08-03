@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::fs;
 use std::path::Path;
+use std::process::Command;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Template {
@@ -64,7 +65,10 @@ components = ["rustfmt", "rust-analyzer"]
 
         fs::create_dir_all(target_path)?;
 
-        fs::write(target_path.join("flake.nix"), &template.flake_content)?;
+        let flake_path = target_path.join("flake.nix");
+        fs::write(&flake_path, &template.flake_content)?;
+
+        self.format_with_nixfmt(&flake_path)?;
 
         for (filename, content) in &template.additional_files {
             fs::write(target_path.join(filename), content)?;
@@ -86,7 +90,10 @@ components = ["rustfmt", "rust-analyzer"]
         let merged = crate::merger::merge_templates(&templates)?;
 
         fs::create_dir_all(target_path)?;
-        fs::write(target_path.join("flake.nix"), merged)?;
+        let flake_path = target_path.join("flake.nix");
+        fs::write(&flake_path, merged)?;
+
+        self.format_with_nixfmt(&flake_path)?;
 
         for template in &templates {
             for (filename, content) in &template.additional_files {
@@ -97,6 +104,29 @@ components = ["rustfmt", "rust-analyzer"]
             }
         }
 
+        Ok(())
+    }
+
+    fn format_with_nixfmt(&self, file_path: &Path) -> Result<()> {
+        if Command::new("nixfmt").arg("--version").output().is_ok() {
+            let output = Command::new("nixfmt")
+                .arg(file_path)
+                .output();
+            
+            match output {
+                Ok(result) if result.status.success() => {
+                    println!("Formatted {} with nixfmt", file_path.display());
+                }
+                Ok(result) => {
+                    eprintln!("Warning: nixfmt failed to format {}: {}", 
+                        file_path.display(), 
+                        String::from_utf8_lossy(&result.stderr));
+                }
+                Err(_) => {
+                    eprintln!("Warning: Failed to run nixfmt on {}", file_path.display());
+                }
+            }
+        }
         Ok(())
     }
 

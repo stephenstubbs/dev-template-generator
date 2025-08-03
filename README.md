@@ -9,6 +9,7 @@ A Rust CLI tool for generating nix development environments. Supports 35 program
 - **Self-Contained**: All templates are embedded - no external dependencies
 - **Intelligent Merging**: Automatically handles overlays, inputs, and package conflicts
 - **Nix Flakes**: Generates modern nix flake.nix files for reproducible environments
+- **Automatic Formatting**: Generated flake.nix files are automatically formatted with nixfmt when available
 
 ## Supported Languages
 
@@ -142,6 +143,20 @@ echo "use flake" > .envrc
 echo "use flake" | save .envrc
 direnv allow
 ```
+
+#### Code Formatting
+
+Generated `flake.nix` files are automatically formatted with [nixfmt](https://github.com/NixOS/nixfmt) when available. To install nixfmt:
+
+```bash
+# Install nixfmt
+nix profile install nixpkgs#nixfmt
+
+# Or add to your system configuration
+# Or include in your development shell
+```
+
+If nixfmt is not available, files will still be generated successfully but without formatting.
 
 ### Advanced Usage
 
